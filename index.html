@@ -5,21 +5,125 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>VueJS</title>
 	<script src="vue.js" type="text/javascript"></script>
+	<style type="text/css" media="screen">
+		.demo {
+			width: 100px;
+			height: 100px;
+			background-color: gray;
+			display: inline-block;
+			margin: 10px;
+		}
+		.red { background-color: red; }
+		.green { background-color: green; }
+		.blue { background-color: blue; }
+	</style>
 </head>
 <body>
 	<div id="app">
-		<input type="text" v-on:input="changeTitle">
-		<p>{{ title }}</p>
+		<h1 v-once>{{ title }}</h1>
+		<p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+		<p v-html="finishedLink"></p>
+		<hr>
+		<button v-on:click="increase(2, $event)">Click me</button>
+		<button v-on:click="counter++">Click me</button>
+		<p>{{ counter }}</p>
+		<p v-on:mousemove="updateCordinates">
+			Cordinates: {{ x }} / {{ y }}
+			- <span v-on:mousemove.stop="">DEAD SPOT</span>
+		</p>
+		<input type="text" v-on:keyup.enter="alertMe">
+		<hr>
+		<input type="text" v-model="name">
+		<p>{{ name }}</p>
+		<hr>
+		<button v-on:click="counter++">Increase</button>
+		<button v-on:click="counter--">Decrease</button>
+		<button v-on:click="secondCounter++">Second Counter</button>
+		<p>Counter: {{ counter }} | {{ secondCounter }}</p>
+		<p>Restul: {{ result() }} | {{ output }}</p>
+		<hr>
+		<button @click="changeLink">Click to change Link</button>
+		<a :href="link2">Link</a>
+		<hr>
+		<div class="demo" @click="attachRed = !attachRed" :class="divClasses"></div>
+		<div class="demo" :style="[myStyle, { height: width + 'px' }]"></div>
+		<div class="demo" :class="color"></div>
+		<div class="demo" :style="myStyle"></div>
+		<input type="text" v-model="color">
+		<input type="text" v-model="width">
 	</div>
 	<script>
 		new Vue({
 			el: '#app',
 			data: {
-				title: 'Hello World!'
+				title: 'Hello World!',
+				link: 'http://google.com',
+				finishedLink: '<a href="http:///google.com.br">Google</a>',
+				counter: 0,
+				x: 0,
+				y:0,
+				name: 'Bernard',
+				secondCounter: 0,
+				link2: 'htpp://globo.com',
+				attachRed: false,
+				color: 'green',
+				width: 100
 			},
 			methods: {
-				changeTitle: function(event) {
-					this.title = event.target.value;
+				sayHello: function(event) {
+					this.title = 'Hello!';
+					return this.title;
+				},
+				increase: function(step, event) {
+					this.counter += step;
+				},
+				updateCordinates: function(event) {
+					this.x = event.clientX;
+					this.y = event.clientY;
+				},
+				alertMe: function() {
+					alert('Alert!');
+				},
+				// increase2: function() {
+				// 	this.counter++;
+				// 	this.result2 = this.counter > 5 ? 'Greater 5' : 'Smaller 5'
+				// },
+				// decrease2: function() {
+				// 	this.counter--;
+				// 	this.result2 = this.counter > 5 ? 'Greater 5' : 'Smaller 5'
+				// },
+				result: function() {
+					// console.log('Method');
+					return this.counter > 5 ? 'Greater 5' : 'Smaller 5'
+				},
+				changeLink: function() {
+					return console.log('Link changed!');
+				}
+			},
+			computed: {
+				output: function() {
+					// console.log('Computed');
+					return this.counter > 5 ? 'Greater 5' : 'Smaller 5'
+				},
+				divClasses: function() {
+					return {
+						red: this.attachRed,
+						blue: !this.attachRed
+					}
+				},
+				myStyle: function() {
+					return {
+						backgroundColor: this.color,
+						width: this.width + 'px'
+					};
+				}
+			},
+			watch: {
+				counter: function(value) {
+					var vm = this;
+					setTimeout(function() {
+						vm.counter = 0;
+					}, 2000);
 				}
 			}
 		});
