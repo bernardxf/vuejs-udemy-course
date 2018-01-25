@@ -2,7 +2,7 @@
 	"name": "vue-cli",
 	"description": "A Vue.js project",
 	"version": "1.0.0",
-	"author": "Bernard Faria <bernard@zubb.com.br>",
+	"author": "Bernard Faria <bernardxf@gmail.com>",
 	"license": "MIT",
 	"private": true,
 	"scripts": {
